@@ -20,6 +20,9 @@ export const handler = async (event, context) => {
             console.error('Error in pwd: ', error)
             return context.fail('Error in pwd')
         } 
+        else {
+            console.log('pwd: ', stdout)
+        }
     })
 
     const url = JSON.parse(JSON.stringify(event)).URL;
