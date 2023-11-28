@@ -4,4 +4,6 @@ logile.log
 node_modules/.package-lock.json
 /cli_storage/
 one-url.txt
+tmp/
+```
 ```

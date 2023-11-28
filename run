@@ -28,7 +28,7 @@ if [ "$1" == "install" ]; then
     exit 0
 elif [[ "$1" == "URL_FILE" ]]; then
     url="$2"
-    rm -rf "cli_storage"/*
+    rm -rf "tmp"/*
     #echo "Running URL_FILE command with url: $url"
     #echo "Clearing local package storage..."
     #echo "Compiling essential scripts..."

@@ -440,7 +440,7 @@ function cloneREPO(username, repository) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     repoUrl = "https://github.com/".concat(username, "/").concat(repository, ".git");
-                    destinationPath = "tmp/".concat(repository);
+                    destinationPath = "/tmp/".concat(repository);
                     cloneCommand = "git clone ".concat(repoUrl, " ").concat(destinationPath);
                     return [4 /*yield*/, exec(cloneCommand)];
                 case 1:
@@ -572,7 +572,7 @@ function fetchGitHubInfo(npmPackageUrl, personalAccessToken) {
                             logBasedOnVerbosity("No license information found for this repository. Continuing as Unlicensed.", 1);
                         }
                     }
-                    rootDirectory = "./tmp/".concat(githubInfo.repository);
+                    rootDirectory = "/tmp/".concat(githubInfo.repository);
                     return [4 /*yield*/, traverseDirectory(rootDirectory)];
                 case 6:
                     totalLines = _b.sent();
