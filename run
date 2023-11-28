@@ -36,7 +36,7 @@ elif [[ "$1" == "URL_FILE" ]]; then
     # tsc logger.ts
     # tsc npm-github-netscore.ts
     #echo "Scripts compiled."
-    npx ts-node run.ts "URL_FILE" "$url"
+    node run.js "URL_FILE" "$url"
     if [ $? -ne 0 ]; then
     echo "An error occurred. Enable or check logfile for debugging"
     exit 1
