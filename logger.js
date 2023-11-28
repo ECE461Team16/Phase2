@@ -9,7 +9,7 @@ var customFormat = printf(function (_a) {
 });
 var createCustomLogger = function (labelStr, level) {
     return (0, winston_1.createLogger)({
-        level: level || 'info',
+        level: level || 'info', // Set the specified level or default to 'info'
         format: combine(label({ label: labelStr }), timestamp(), customFormat),
         transports: [
             new winston_1.transports.Console(),
