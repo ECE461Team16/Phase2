@@ -2,34 +2,6 @@ import { exec } from 'child_process';
 
 export const handler = async (event, context) => {
     try {
-        exec("npm install -g n", (error, stdout, stderr) => {
-            if (error) {
-                console.error('Error in npm install -g n: ', error)
-                return context.fail('Error in npm install -g n')
-            } 
-        })
-    } catch (error) {
-        console.error('Error:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Internal Server Error' }),
-        };
-    }
-    try {
-        exec("n 18", (error, stdout, stderr) => {
-            if (error) {
-                console.error('Error in n 18: ', error)
-                return context.fail('Error in n 18')
-            } 
-        })
-    } catch (error) {
-        console.error('Error:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Internal Server Error' }),
-        };
-    }
-    try {
         exec("npm i", (error, stdout, stderr) => {
             if (error) {
                 console.error('Error in npm install: ', error)
