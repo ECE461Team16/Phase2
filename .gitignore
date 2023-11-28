@@ -1,8 +1,7 @@
 /.env
 logile.log
 /package-lock.json
-node_modules/.package-lock.json
+
 /cli_storage/
 one-url.txt
-/node_modules/
 ```
