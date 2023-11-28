@@ -2,6 +2,20 @@ import { exec } from 'child_process';
 
 export const handler = async (event, context) => {
     try {
+        exec("nvm use 18", (error, stdout, stderr) => {
+            if (error) {
+                console.error('Error in nvm use 18: ', error)
+                return context.fail('Error in nvm use 18')
+            } 
+        })
+    } catch (error) {
+        console.error('Error:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ message: 'Internal Server Error' }),
+        };
+    }
+    try {
         exec("npm i", (error, stdout, stderr) => {
             if (error) {
                 console.error('Error in npm install: ', error)
