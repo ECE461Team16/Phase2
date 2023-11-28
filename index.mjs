@@ -15,6 +15,12 @@ export const handler = async (event, context) => {
             body: JSON.stringify({ message: 'Internal Server Error' }),
         };
     }
+    exec("pwd", (error, stdout, stderr) => {
+        if (error) {
+            console.error('Error in pwd: ', error)
+            return context.fail('Error in pwd')
+        } 
+    })
 
     const url = JSON.parse(JSON.stringify(event)).URL;
 
@@ -25,7 +31,6 @@ export const handler = async (event, context) => {
 
         // Variable to store the output
         let scriptOutput = '';
-        process.env.PATH = `${process.env.PATH}:${process.cwd()}/node_modules/.bin`;
         // Execute the command
         const childProcess = exec(command, (error, stdout, stderr) => {
             if (error) {
