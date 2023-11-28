@@ -405,7 +405,8 @@ async function extractGitHubInfo(
 async function cloneREPO(username: string, repository: string) {
   try {
     const repoUrl = `https://github.com/${username}/${repository}.git`;
-    const destinationPath = `cli_storage/${repository}`;
+    // const destinationPath = `cli_storage/${repository}`;
+    const destinationPath = `tmp/${repository}`;
     const cloneCommand = `git clone ${repoUrl} ${destinationPath}`;
 
     const { stdout, stderr } = await exec(cloneCommand);
@@ -524,7 +525,7 @@ export async function fetchGitHubInfo(
         }
       }
 
-      const rootDirectory = `./cli_storage/${githubInfo.repository}`;
+      const rootDirectory = `./tmp/${githubInfo.repository}`;
       const totalLines = await traverseDirectory(rootDirectory);
       const total_lines = totalLines[1] - totalLines[0];
       const { pinned_dependencies, total_dependencies } =
