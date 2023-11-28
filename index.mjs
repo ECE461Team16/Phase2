@@ -2,11 +2,14 @@ import { exec } from 'child_process';
 
 export const handler = async (event, context) => {
     try {
-        exec("npm i", (error, stdout, stderr) => {
+        exec("./run install", (error, stdout, stderr) => {
             if (error) {
                 console.error('Error in npm install: ', error)
                 return context.fail('Error in npm install')
             } 
+            else {
+                console.log('npm install: ', stdout)
+            }
         })
     } catch (error) {
         console.error('Error:', error);
