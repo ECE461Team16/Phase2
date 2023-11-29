@@ -7,10 +7,7 @@ export const handler = async (event, context) => {
         exec('rm -rf /tmp/*', (error, stdout, stderr) => {  //remove /tmp file
             if (error) {
               console.error(`exec error: ${error}`);
-              return;
             }
-            console.log(`stdout: ${stdout}`);
-            console.error(`stderr: ${stderr}`);
           });
 
         // Construct the command to run the Bash script
