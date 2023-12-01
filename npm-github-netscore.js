@@ -100,7 +100,7 @@ function countLinesInFile(filePath) {
 exports.countLinesInFile = countLinesInFile;
 function getReviewedPercentage(owner, repo, personalAccessToken) {
     return __awaiter(this, void 0, void 0, function () {
-        var octokit, response, reviewedLines_1, totalLines_1, totalPullRequests, reviewedPullRequests, error_1;
+        var octokit, response, totalLines_1, reviewedLines_1, uniqueReviewedLines_1, uniqueTotalLines_1, error_1;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -112,23 +112,25 @@ function getReviewedPercentage(owner, repo, personalAccessToken) {
                     return [4 /*yield*/, octokit.pulls.list({
                             owner: owner,
                             repo: repo,
-                            state: "all",
+                            state: "closed",
                         })];
                 case 2:
                     response = _a.sent();
-                    reviewedLines_1 = 0;
                     totalLines_1 = 0;
+                    reviewedLines_1 = 0;
+                    uniqueReviewedLines_1 = new Set();
+                    uniqueTotalLines_1 = new Set();
                     return [4 /*yield*/, Promise.all(response.data.map(function (pullRequest) { return __awaiter(_this, void 0, void 0, function () {
-                            var reviewsResponse, isReviewed, filesResponse, _i, _a, file, prResponse;
-                            return __generator(this, function (_b) {
-                                switch (_b.label) {
+                            var reviewsResponse, isReviewed, filesResponse, _i, _a, file, filesResponse, _b, _c, file;
+                            return __generator(this, function (_d) {
+                                switch (_d.label) {
                                     case 0: return [4 /*yield*/, octokit.pulls.listReviews({
                                             owner: owner,
                                             repo: repo,
                                             pull_number: pullRequest.number,
                                         })];
                                     case 1:
-                                        reviewsResponse = _b.sent();
+                                        reviewsResponse = _d.sent();
                                         isReviewed = reviewsResponse.data.some(function (review) { return review.state === "APPROVED"; });
                                         if (!isReviewed) return [3 /*break*/, 3];
                                         return [4 /*yield*/, octokit.pulls.listFiles({
@@ -137,29 +139,38 @@ function getReviewedPercentage(owner, repo, personalAccessToken) {
                                                 pull_number: pullRequest.number,
                                             })];
                                     case 2:
-                                        filesResponse = _b.sent();
+                                        filesResponse = _d.sent();
                                         for (_i = 0, _a = filesResponse.data; _i < _a.length; _i++) {
                                             file = _a[_i];
-                                            reviewedLines_1 += file.changes;
+                                            if (!uniqueReviewedLines_1.has(file.filename)) {
+                                                reviewedLines_1 += file.changes;
+                                                uniqueReviewedLines_1.add(file.filename);
+                                            }
                                         }
-                                        _b.label = 3;
-                                    case 3: return [4 /*yield*/, octokit.pulls.get({
+                                        return [3 /*break*/, 5];
+                                    case 3: return [4 /*yield*/, octokit.pulls.listFiles({
                                             owner: owner,
                                             repo: repo,
                                             pull_number: pullRequest.number,
                                         })];
                                     case 4:
-                                        prResponse = _b.sent();
-                                        totalLines_1 += prResponse.data.additions;
-                                        return [2 /*return*/];
+                                        filesResponse = _d.sent();
+                                        for (_b = 0, _c = filesResponse.data; _b < _c.length; _b++) {
+                                            file = _c[_b];
+                                            if (!uniqueTotalLines_1.has(file.filename)) {
+                                                totalLines_1 += file.changes;
+                                                uniqueTotalLines_1.add(file.filename);
+                                            }
+                                        }
+                                        _d.label = 5;
+                                    case 5: return [2 /*return*/];
                                 }
                             });
                         }); }))];
                 case 3:
                     _a.sent();
-                    totalPullRequests = response.data.length;
-                    reviewedPullRequests = reviewedLines_1 > 0 ? 1 : 0;
-                    return [2 /*return*/, (reviewedLines_1 / totalLines_1) * 100];
+                    totalLines_1 += reviewedLines_1;
+                    return [2 /*return*/, totalLines_1 > 0 ? (reviewedLines_1 / totalLines_1) : 0];
                 case 4:
                     error_1 = _a.sent();
                     console.error("Error fetching reviewed lines percentage: ".concat(error_1.message));

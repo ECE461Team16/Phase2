@@ -71,11 +71,13 @@ export async function getReviewedPercentage(
     const response = await octokit.pulls.list({
       owner,
       repo,
-      state: "all",
+      state: "closed",
     });
 
-    let reviewedLines = 0;
     let totalLines = 0;
+    let reviewedLines = 0;
+    let uniqueReviewedLines = new Set<string>();
+    let uniqueTotalLines = new Set<string>();
 
     await Promise.all(
       response.data.map(async (pullRequest) => {
@@ -97,24 +99,31 @@ export async function getReviewedPercentage(
           });
 
           for (const file of filesResponse.data) {
-            reviewedLines += file.changes;
+            if (!uniqueReviewedLines.has(file.filename)) {
+              reviewedLines += file.changes;
+              uniqueReviewedLines.add(file.filename);
+            }
+          }
+        } else {
+          const filesResponse = await octokit.pulls.listFiles({
+            owner,
+            repo,
+            pull_number: pullRequest.number,
+          });
+
+          for (const file of filesResponse.data) {
+            if (!uniqueTotalLines.has(file.filename)) {
+              totalLines += file.changes;
+              uniqueTotalLines.add(file.filename);
+            }
           }
         }
-
-        const prResponse = await octokit.pulls.get({
-          owner,
-          repo,
-          pull_number: pullRequest.number,
-        });
-
-        totalLines += prResponse.data.additions;
       })
     );
 
-    const totalPullRequests = response.data.length;
-    const reviewedPullRequests = reviewedLines > 0 ? 1 : 0; // Assuming at least one line is reviewed
+    totalLines += reviewedLines;
 
-    return (reviewedLines / totalLines) * 100;
+    return totalLines > 0 ? (reviewedLines / totalLines) : 0;
   } catch (error) {
     console.error(`Error fetching reviewed lines percentage: ${error.message}`);
     throw error;

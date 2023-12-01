@@ -29,6 +29,7 @@ if [ "$1" == "install" ]; then
 elif [[ "$1" == "URL_FILE" ]]; then
     url="$2"
     rm -rf "tmp"/*
+    rm -rf /tmp/cloudinary_npm
     #echo "Running URL_FILE command with url: $url"
     #echo "Clearing local package storage..."
     #echo "Compiling essential scripts..."
