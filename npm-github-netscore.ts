@@ -332,7 +332,7 @@ async function extractGitHubInfo(
   npmPackageUrl: string
 ): Promise<{ username: string; repository: string } | null> {
   try {
-    const githubUrlPattern = /^https:\/\/github\.com\/([^/]+)\/([^/]+)(\/|$)/i;
+    const githubUrlPattern = new RegExp('^(?:https?://)?(?:\\S+@)?(?:github.com/)?([^/]+)/([^/]+)(?:/|$)', 'i');
 
     //Checks if it is a github url if not treats it as a npm url
     if (!githubUrlPattern.test(npmPackageUrl)) {

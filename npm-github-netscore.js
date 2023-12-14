@@ -375,7 +375,7 @@ function extractGitHubInfo(npmPackageUrl) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 4, , 5]);
-                    githubUrlPattern = /^https:\/\/github\.com\/([^/]+)\/([^/]+)(\/|$)/i;
+                    githubUrlPattern = new RegExp('^(?:https?://)?(?:\\S+@)?(?:github.com/)?([^/]+)/([^/]+)(?:/|$)', 'i');
                     if (!!githubUrlPattern.test(npmPackageUrl)) return [3 /*break*/, 2];
                     npmUrlPattern = /https:\/\/(www\.)?npmjs\.com\/package\/([^/?#]+)/;
                     npmUrlMatch = npmPackageUrl.match(npmUrlPattern);
